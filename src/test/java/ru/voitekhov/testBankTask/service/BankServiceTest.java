@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ru.voitekhov.testBankTask.BankTestData.*;
 
 @SpringBootTest
-@Sql(scripts = "classpath:/database/populateDB.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+/*@Sql(scripts = "classpath:/database/populateDB.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)*/
 class BankServiceTest {
 
     @Autowired

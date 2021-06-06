@@ -24,13 +24,19 @@ public class BankServiceImpl implements BankService {
     @Override
     @Transactional
     public Bank save(Bank bank) {
-        if (this.countBanksWithBik(bank.getBik()) > 0 && bank.isNew()) {
-            throw new BadRequestException("Bik is not unique");
+        //save
+        if (this.countBanksWithBik(bank.getBik()) == 0 && bank.isNew()) {
+            return crudRepository.save(bank);
         }
-        if (this.countBanksWithBik(bank.getBik()) > 0 && !bank.isNew() && getByBik(bank.getBik()).getId() != bank.getId()) {
-            throw new BadRequestException("Bik is not unique");
+        //update name
+        if (this.countBanksWithBik(bank.getBik()) == 1 && getByBik(bank.getBik()).getId().equals(bank.getId())) {
+            return crudRepository.save(bank);
         }
-        return crudRepository.save(bank);
+        //update bik
+        if (this.countBanksWithBik(bank.getBik()) == 0 && !bank.isNew()){
+            return crudRepository.save(bank);
+        }
+            throw new BadRequestException("Bik is not unique");
     }
 
     @Override
