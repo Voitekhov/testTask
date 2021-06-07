@@ -4,14 +4,14 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class AbstractBaseEntity {
+public abstract class AbstractEntity {
     private static final int START_SEQ = 100000;
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
     protected Integer id;
 
-    protected AbstractBaseEntity(Integer id) {
+    protected AbstractEntity(Integer id) {
         this.id = id;
     }
 
@@ -19,7 +19,7 @@ public abstract class AbstractBaseEntity {
         this.id = id;
     }
 
-    protected AbstractBaseEntity() {
+    protected AbstractEntity() {
     }
 
     public Integer getId() {
@@ -42,7 +42,7 @@ public abstract class AbstractBaseEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        AbstractBaseEntity that = (AbstractBaseEntity) o;
+        AbstractEntity that = (AbstractEntity) o;
         return id != null && id.equals(that.id);
     }
 

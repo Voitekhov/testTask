@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "clients")
-public class Client extends AbstractBaseEntity {
+public class Client extends AbstractEntity {
     @NotBlank
     @Column(name = "name", nullable = false)
     private String name;

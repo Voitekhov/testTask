@@ -3,6 +3,8 @@ package ru.voitekhov.testBankTask.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.voitekhov.testBankTask.exception.BadRequestException;
+import ru.voitekhov.testBankTask.exception.NotFoundException;
 import ru.voitekhov.testBankTask.model.Bank;
 import ru.voitekhov.testBankTask.service.BankService;
 
@@ -21,37 +23,64 @@ public class BankRestController {
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Bank get(@PathVariable("id") int id) {
-        return service.get(id);
+        Bank bank = service.get(id);
+        if (bank == null) {
+            throw new NotFoundException(String.format("Bank with id: %s not found", id));
+        }
+        return bank;
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Bank save(@RequestBody @Valid Bank bank) {
-        return service.save(bank);
+        Bank savedBank = service.save(bank);
+        if (savedBank == null) {
+            throw new BadRequestException("Bik is not unique");
+        }
+        return savedBank;
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Bank update(@RequestBody @Valid Bank bank) {
-        return service.save(bank);
+        Bank updatedBank = service.save(bank);
+        if (updatedBank == null) {
+            throw new BadRequestException("Bik is not unique");
+        }
+        return updatedBank;
     }
 
     @DeleteMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean delete(@PathVariable("id") int id) {
-        return service.delete(id);
+        if (!service.delete(id)) {
+            throw new NotFoundException(String.format("Bank with id: %s not found", id));
+        }
+        return true;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Bank> getAll() {
-        return service.getAll();
+        List<Bank> banks = service.getAll();
+        if (banks.isEmpty()) {
+            throw new NotFoundException("Banks not found");
+        }
+        return banks;
     }
 
     @GetMapping(value = "getAllSorted", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Bank> getAllSorted() {
-        return service.getAllSorted();
+        List<Bank> banks = service.getAllSorted();
+        if (banks.isEmpty()) {
+            throw new NotFoundException("Banks not found");
+        }
+        return banks;
     }
 
     @GetMapping(value = "findByBik/{bik}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Bank getByBik(@PathVariable("bik") String bik) {
-        return service.getByBik(bik);
+        Bank bank = service.getByBik(bik);
+        if (bank == null) {
+            throw new NotFoundException(String.format("Bank with bik: %s not found", bik));
+        }
+        return bank;
     }
 
 }

@@ -3,7 +3,6 @@ package ru.voitekhov.testBankTask.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.voitekhov.testBankTask.exception.NotFoundException;
 import ru.voitekhov.testBankTask.model.Client;
 import ru.voitekhov.testBankTask.model.LegalStatus;
 import ru.voitekhov.testBankTask.repository.datajpa.ClientRepository;
@@ -29,36 +28,23 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client get(int id) {
-        return crudRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format(
-                "Client with id: %s not found", id)));
-
-
+        return crudRepository.findById(id).orElse(null);
     }
 
     @Override
     public boolean delete(int id) {
-        if (crudRepository.delete(id) != 0) {
-            return true;
-        }
-        throw new NotFoundException(String.format("Client with id: %s not found", id));
-
+        return crudRepository.delete(id) != 0;
     }
 
     @Override
     public List<Client> getAll() {
         List<Client> clients = crudRepository.findAll();
-        if (!clients.isEmpty()) {
-            return clients;
-        }
-        throw new NotFoundException("Clients not found");
+        return clients.isEmpty() ? null : clients;
     }
 
     @Override
     public List<Client> sortByLegalStatus(LegalStatus legalStatus) {
         List<Client> clients = crudRepository.sortByLegalStatus(legalStatus);
-        if (!clients.isEmpty()) {
-            return clients;
-        }
-        throw new NotFoundException("Clients not found");
+        return clients.isEmpty() ? null : clients;
     }
 }

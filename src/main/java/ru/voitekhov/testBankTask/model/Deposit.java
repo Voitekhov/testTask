@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "deposits")
-public class Deposit extends AbstractBaseEntity {
+public class Deposit extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "bank_id")

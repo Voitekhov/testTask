@@ -1,18 +1,15 @@
 package ru.voitekhov.testBankTask.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.voitekhov.testBankTask.exception.BadRequestException;
-import ru.voitekhov.testBankTask.exception.NotFoundException;
 import ru.voitekhov.testBankTask.model.Bank;
 import ru.voitekhov.testBankTask.model.Client;
 import ru.voitekhov.testBankTask.model.Deposit;
-import ru.voitekhov.testBankTask.service.DepositService;
 import ru.voitekhov.testBankTask.repository.datajpa.BankRepository;
 import ru.voitekhov.testBankTask.repository.datajpa.ClientRepository;
 import ru.voitekhov.testBankTask.repository.datajpa.DepositRepository;
+import ru.voitekhov.testBankTask.service.DepositService;
 
 import java.util.List;
 
@@ -36,8 +33,7 @@ public class DepositServiceImpl implements DepositService {
         Client client = clientRepository.findById(clientId).orElse(null);
         Bank bank = bankRepository.findById(bankId).orElse(null);
         if (client == null || bank == null) {
-            throw new NotFoundException(String.format("Not found bank with id: %s or client " +
-                    "with id %s", bankId, clientId));
+            return null;
         }
         deposit.setBank(bank);
         deposit.setClient(client);
@@ -46,17 +42,12 @@ public class DepositServiceImpl implements DepositService {
 
     @Override
     public Deposit get(int id) {
-        return depositRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Not found deposit " +
-                        "with id %s", id)));
+        return depositRepository.findById(id).orElse(null);
     }
 
     @Override
     public boolean delete(int id) {
-        if (depositRepository.delete(id) != 0) {
-            return true;
-        }
-        throw new NotFoundException(String.format("Not found deposit with id %s", id));
+        return depositRepository.delete(id) != 0;
     }
 
     @Override

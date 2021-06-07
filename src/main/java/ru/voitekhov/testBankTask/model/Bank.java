@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "banks")
-public class Bank extends AbstractBaseEntity {
+public class Bank extends AbstractEntity {
 
     @NotBlank
     @Column(name = "name", nullable = false)

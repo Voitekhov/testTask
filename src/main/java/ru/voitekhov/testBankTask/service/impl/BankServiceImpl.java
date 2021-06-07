@@ -3,11 +3,9 @@ package ru.voitekhov.testBankTask.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.voitekhov.testBankTask.exception.NotFoundException;
-import ru.voitekhov.testBankTask.exception.BadRequestException;
 import ru.voitekhov.testBankTask.model.Bank;
-import ru.voitekhov.testBankTask.service.BankService;
 import ru.voitekhov.testBankTask.repository.datajpa.BankRepository;
+import ru.voitekhov.testBankTask.service.BankService;
 
 import java.util.List;
 
@@ -33,56 +31,41 @@ public class BankServiceImpl implements BankService {
             return crudRepository.save(bank);
         }
         //update bik
-        if (this.countBanksWithBik(bank.getBik()) == 0 && !bank.isNew()){
+        if (this.countBanksWithBik(bank.getBik()) == 0 && !bank.isNew()) {
             return crudRepository.save(bank);
         }
-            throw new BadRequestException("Bik is not unique");
+        return null;
     }
 
     @Override
     public boolean delete(int id) {
-        if (crudRepository.delete(id) != 0) {
-            return true;
-        }
-        throw new NotFoundException(String.format("Bank with id: %s not found", id));
+        return crudRepository.delete(id) != 0;
     }
 
     @Override
     public Bank get(int id) {
-        return crudRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Bank with id: %s not found", id)));
+        return crudRepository.findById(id).orElse(null);
     }
 
     @Override
     public List<Bank> getAll() {
         List<Bank> banks = crudRepository.findAll();
-        if (!banks.isEmpty()) {
-            return banks;
-        }
-        throw new NotFoundException("Banks not found");
+        return banks.isEmpty() ? null : banks;
     }
 
     @Override
     public List<Bank> getAllSorted() {
         List<Bank> banks = crudRepository.getAllSorted();
-        if (!banks.isEmpty()) {
-            return banks;
-        }
-        throw new NotFoundException("Banks not found");
+        return banks.isEmpty() ? null : banks;
     }
 
     @Override
     public Bank getByBik(String bik) {
-        Bank bank = crudRepository.findByBik(bik);
-        if (bank != null) {
-            return bank;
-        }
-        throw new NotFoundException(String.format("Bank with bik: %s not found", bik));
+        return crudRepository.findByBik(bik);
     }
 
     private int countBanksWithBik(String bik) {
         return crudRepository.countBik(bik);
     }
-
 
 }
