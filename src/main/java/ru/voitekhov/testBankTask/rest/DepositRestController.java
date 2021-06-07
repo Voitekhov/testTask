@@ -33,7 +33,7 @@ public class DepositRestController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Deposit> getAll() {
         List<Deposit> deposits = service.getAll();
-        if (deposits.isEmpty()) {
+        if (deposits == null) {
             throw new NotFoundException("Deposits not found");
         }
         return service.getAll();

@@ -59,7 +59,7 @@ public class BankRestController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Bank> getAll() {
         List<Bank> banks = service.getAll();
-        if (banks.isEmpty()) {
+        if (banks == null) {
             throw new NotFoundException("Banks not found");
         }
         return banks;
@@ -68,7 +68,7 @@ public class BankRestController {
     @GetMapping(value = "getAllSorted", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Bank> getAllSorted() {
         List<Bank> banks = service.getAllSorted();
-        if (banks.isEmpty()) {
+        if (banks == null) {
             throw new NotFoundException("Banks not found");
         }
         return banks;

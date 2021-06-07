@@ -52,7 +52,7 @@ public class ClientRestController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Client> getAll() {
         List<Client> clients = service.getAll();
-        if (clients.isEmpty()) {
+        if (clients == null) {
             throw new NotFoundException("Clients not found");
         }
         return clients;
@@ -61,7 +61,7 @@ public class ClientRestController {
     @GetMapping(value = "filtered", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Client> filtered(@RequestBody LegalStatus legalStatus) {
         List<Client> clients = service.sortByLegalStatus(legalStatus);
-        if (clients.isEmpty()) {
+        if (clients == null) {
             throw new NotFoundException(String.format("Clients with legal status %s not found",
                     legalStatus.getTitle()));
         }
